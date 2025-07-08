@@ -1,6 +1,7 @@
 import "./globals.css";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
+import ScrollToTop from "./components/ScrollToTop";
 
 export const metadata = {
   title: "Hardcore Biometric Systems",
@@ -18,6 +19,7 @@ export default function RootLayout({
         <Header />
         <main>{children}</main>
         <Footer />
+        <ScrollToTop />
       </body>
     </html>
   );
