@@ -2,8 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
-
-import clsx from "clsx";
 import {
   motion,
   AnimatePresence,
@@ -11,6 +9,7 @@ import {
   Variants,
   TargetAndTransition,
 } from "framer-motion";
+import clsx from "clsx";
 import Logo from "./Logo";
 
 const links = [
@@ -64,6 +63,9 @@ export default function Header() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  const linkBase =
+    "rounded-full px-4 py-1.5 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70";
+
   return (
     <>
       <motion.span
@@ -78,14 +80,13 @@ export default function Header() {
 
       <motion.header
         className={clsx(
-          "fixed inset-x-0 top-0 z-50 flex h-14 items-center justify-between bg-surface/70 px-4 backdrop-blur-md shadow-sm md:h-16 md:px-8",
-          scrolled && "ring-1 ring-white/10"
+          "fixed inset-x-0 top-0 z-50 flex items-center bg-white/95 backdrop-blur-md shadow-sm ring-1 ring-gray-200 text-gray-800 dark:bg-gray-900/90 dark:text-gray-100 transition-colors duration-300 px-4 md:px-8 py-3 md:py-5"
         )}
         initial={{ y: -80 }}
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 100, damping: 15 }}
       >
-        <div className="container mx-auto flex h-14 md:h-16 items-center justify-between px-4 md:px-8">
+        <div className="container mx-auto flex flex-1 items-center justify-between">
           <Logo />
 
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
@@ -93,7 +94,10 @@ export default function Header() {
               <motion.a
                 key={href}
                 href={href}
-                className="rounded-full bg-white/5 px-4 py-1.5 text-gray-300 hover:bg-accent hover:text-surface transition"
+                className={clsx(
+                  linkBase,
+                  "bg-black/5 text-gray-800 hover:bg-accent hover:text-white dark:bg-white/10 dark:text-gray-100"
+                )}
                 variants={navItemVariants}
                 initial="hidden"
                 animate="visible"
@@ -109,8 +113,8 @@ export default function Header() {
           <motion.button
             ref={menuBtnRef}
             onClick={() => setOpen(true)}
-            className="md:hidden"
             aria-label="Open mobile menu"
+            className="md:hidden"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
@@ -122,7 +126,7 @@ export default function Header() {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed inset-0 z-50 flex flex-col bg-white dark:bg-gray-900 text-[var(--foreground)] dark:text-[var(--text-dark)]"
+            className="fixed inset-0 z-50 flex flex-col bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100"
             initial="hidden"
             animate="visible"
             exit="exit"
