@@ -1,8 +1,11 @@
 "use client";
+
+import * as React from "react";
 import { useState, type FormEvent, type ChangeEvent } from "react";
 import { motion } from "framer-motion";
 
-type FormValues = {
+/* ─ Types ───────────────────────────────────────────── */
+export type FormValues = {
   name: string;
   email: string;
   subject: string;
@@ -11,7 +14,25 @@ type FormValues = {
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-export default function ContactForm() {
+export type ContactFormProps = {
+  title?: string;
+  subtitle?: string;
+  /** Optional class to extend outer wrapper. */
+  className?: string;
+  /** Called on successful submit (after fake/real send). */
+  onSubmitSuccess?: (values: FormValues) => void;
+  /** Replace with your real async sender. Receives form values, must throw on failure. */
+  onSend?: (values: FormValues) => Promise<void>;
+};
+
+/* ─ Component ───────────────────────────────────────── */
+export default function ContactForm({
+  title = "Message Us",
+  subtitle = "Tell us what you need help with and we’ll respond.",
+  className = "",
+  onSubmitSuccess,
+  onSend,
+}: ContactFormProps) {
   const [values, setValues] = useState<FormValues>({
     name: "",
     email: "",
@@ -26,12 +47,20 @@ export default function ContactForm() {
   ) => {
     const { name, value } = e.target;
     setValues((v) => ({ ...v, [name]: value }));
+    setErrors((prev) => {
+      if (!prev[name as keyof FormValues]) return prev;
+      const next = { ...prev };
+      delete next[name as keyof FormValues];
+      return next;
+    });
+    if (status === "error") setStatus("idle");
   };
 
+  /* Basic client validation */
   const validate = (): Partial<FormValues> => {
     const errs: Partial<FormValues> = {};
     if (!values.name.trim()) errs.name = "Name is required.";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email))
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim()))
       errs.email = "Enter a valid email.";
     if (!values.subject.trim()) errs.subject = "Subject is required.";
     if (values.message.trim().length < 10)
@@ -51,8 +80,15 @@ export default function ContactForm() {
 
     setStatus("submitting");
     try {
-      await new Promise((r) => setTimeout(r, 800));
+      if (onSend) {
+        await onSend(values);
+      } else {
+        /* Fake network delay; replace with real request */
+        await new Promise((r) => setTimeout(r, 800));
+      }
+
       setStatus("success");
+      onSubmitSuccess?.(values);
       setValues({ name: "", email: "", subject: "", message: "" });
       setErrors({});
     } catch {
@@ -62,10 +98,9 @@ export default function ContactForm() {
 
   const fieldError = (field: keyof FormValues) => errors[field];
 
-  // shared input styles with border
+  /* Tailwind utility strings (central so we change once) */
   const baseInput =
-    "w-full rounded-md border border-gray-300 bg-white p-3 text-sm shadow-sm placeholder:text-gray-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus:border-accent";
-
+    "w-full rounded-md border border-border bg-background p-3 text-sm shadow-sm placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus:border-accent dark:bg-surface";
   const errorInput =
     "border-red-500 ring-red-500/50 focus-visible:ring-red-500/70 focus:border-red-500";
 
@@ -73,19 +108,28 @@ export default function ContactForm() {
     <motion.form
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
       onSubmit={handleSubmit}
       noValidate
-      className="space-y-6 rounded-xl bg-plain p-8 shadow-card"
+      aria-busy={status === "submitting"}
+      className={`mx-auto w-full max-w-xl space-y-6 rounded-xl bg-white p-6 shadow-lg dark:bg-surface sm:p-8 ${className}`}
     >
-      <h2 className="text-lg font-semibold text-dark">Get in Touch with Us</h2>
+      {/* Heading */}
+      <header className="space-y-2 text-center sm:text-left">
+        <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+        {subtitle && (
+          <p className="text-sm text-muted-foreground">{subtitle}</p>
+        )}
+      </header>
 
+      {/* Name + Email */}
       <div className="grid gap-6 sm:grid-cols-2">
+        {/* Name */}
         <div>
           <label
             htmlFor="contact-name"
-            className="mb-1 block text-sm font-medium text-dark"
+            className="mb-1 block text-sm font-medium text-foreground"
           >
             Your name
           </label>
@@ -96,6 +140,7 @@ export default function ContactForm() {
             onChange={handleChange}
             placeholder="Jane Doe"
             required
+            autoComplete="name"
             aria-invalid={!!fieldError("name")}
             aria-describedby={
               fieldError("name") ? "contact-name-err" : undefined
@@ -112,10 +157,11 @@ export default function ContactForm() {
           )}
         </div>
 
+        {/* Email */}
         <div>
           <label
             htmlFor="contact-email"
-            className="mb-1 block text-sm font-medium text-dark"
+            className="mb-1 block text-sm font-medium text-foreground"
           >
             Your email
           </label>
@@ -127,6 +173,7 @@ export default function ContactForm() {
             onChange={handleChange}
             placeholder="you@example.com"
             required
+            autoComplete="email"
             aria-invalid={!!fieldError("email")}
             aria-describedby={
               fieldError("email") ? "contact-email-err" : undefined
@@ -144,10 +191,11 @@ export default function ContactForm() {
         </div>
       </div>
 
+      {/* Subject */}
       <div>
         <label
           htmlFor="contact-subject"
-          className="mb-1 block text-sm font-medium text-dark"
+          className="mb-1 block text-sm font-medium text-foreground"
         >
           Subject
         </label>
@@ -158,6 +206,7 @@ export default function ContactForm() {
           onChange={handleChange}
           placeholder="Project inquiry"
           required
+          autoComplete="off"
           aria-invalid={!!fieldError("subject")}
           aria-describedby={
             fieldError("subject") ? "contact-subject-err" : undefined
@@ -174,10 +223,11 @@ export default function ContactForm() {
         )}
       </div>
 
+      {/* Message */}
       <div>
         <label
           htmlFor="contact-message"
-          className="mb-1 block text-sm font-medium text-dark"
+          className="mb-1 block text-sm font-medium text-foreground"
         >
           Message
         </label>
@@ -207,29 +257,30 @@ export default function ContactForm() {
         )}
       </div>
 
+      {/* Submit */}
       <div>
         <button
           type="submit"
           disabled={status === "submitting"}
-          className="w-full rounded-md bg-primary py-3 text-sm font-semibold text-white shadow hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 disabled:cursor-not-allowed disabled:opacity-70"
+          className="w-full rounded-md bg-primary px-6 py-3 text-sm font-semibold text-white shadow transition hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 disabled:cursor-not-allowed disabled:opacity-70"
         >
           {status === "submitting" ? "Sending..." : "Send message"}
         </button>
       </div>
 
-      {/* Status feedback */}
+      {/* Status feedback (reserved height prevents layout shift) */}
       <div
         role="status"
         aria-live="polite"
         className="min-h-[1.25rem] text-center text-sm"
       >
         {status === "success" && (
-          <span className="text-green-600 font-medium">
+          <span className="font-medium text-green-600">
             Message sent! We’ll get back to you soon.
           </span>
         )}
         {status === "error" && Object.keys(errors).length === 0 && (
-          <span className="text-red-600 font-medium">
+          <span className="font-medium text-red-600">
             Something went wrong. Please try again.
           </span>
         )}

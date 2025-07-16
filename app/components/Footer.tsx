@@ -2,14 +2,11 @@ import Logo from "./Logo";
 import contactInfo from "../data/contactInfo";
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="mx-auto container px-4 py-10 sm:px-6 lg:px-8">
+    <footer className="bg-gray-700 text-white">
+      <div className="mx-auto container py-6 ">
         <div className="flex flex-col gap-8 md:flex-row md:justify-between md:items-start">
           <div className="flex items-center gap-3">
             <Logo />
-            <span className="text-lg font-semibold tracking-tight">
-              Hardcore Biometric
-            </span>
           </div>
 
           <div className="space-y-3 text-sm text-gray-300 leading-relaxed">

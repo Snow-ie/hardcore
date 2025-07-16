@@ -58,7 +58,7 @@ export default function FeatureSection() {
 
       <div className="absolute inset-0 bg-white/60 md:bg-transparent" />
 
-      <div className="relative z-10 mx-auto container px-6 py-20 lg:px-12">
+      <div className="relative z-10 mx-auto container px-6 py-20 ">
         <div className="md:grid md:grid-cols-2 md:gap-16">
           <div>
             <motion.h2

@@ -20,7 +20,7 @@ const config = {
     },
     extend: {
       colors: {
-        primary: "#6dc032", // removed stray semicolon
+        primary: "#6dc032", 
         secondary: "#FFA737",
         dark: "#2D2D2A",
         plain: "#F1F3F9",
