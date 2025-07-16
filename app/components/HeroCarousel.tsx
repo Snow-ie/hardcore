@@ -7,11 +7,6 @@ import Image from "next/image";
 import clsx from "clsx";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-/**
- * HeroCarousel – covers full viewport on desktop, 80 vh on mobile.
- * Slightly raises caption on small screens so it no longer overlaps the slide indicators.
- */
-
 const slides = [
   {
     id: 1,
@@ -74,7 +69,6 @@ export default function HeroCarousel() {
       className="relative w-full h-[80vh] md:h-screen overflow-hidden"
       {...swipeHandlers}
     >
-      {/* Slides */}
       <AnimatePresence initial={false} custom={dir}>
         <motion.div
           key={slides[index].id}
@@ -95,12 +89,10 @@ export default function HeroCarousel() {
             className="object-cover"
           />
 
-          {/* gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/50 to-black/80" />
 
-          {/* caption – bumped up on mobile with extra bottom padding */}
-          <div className="absolute inset-0 flex flex-col items-start justify-end p-6 pb-24 md:p-12 md:pb-12 space-y-3 text-white drop-shadow-md">
-            <p className="text-xs md:text-sm tracking-widest uppercase text-[var(--accent)]">
+          <div className="absolute inset-0 flex flex-col items-start justify-end p-6 pb-32 md:p-12 md:pb-16 space-y-3 text-white drop-shadow-md">
+            <p className="text-xs md:text-sm tracking-widest uppercase text-white">
               {slides[index].subtitle}
             </p>
             <h1 className="text-2xl md:text-5xl font-bold max-w-xl leading-tight">
@@ -110,23 +102,21 @@ export default function HeroCarousel() {
         </motion.div>
       </AnimatePresence>
 
-      {/* Arrow Controls (desktop) */}
       <button
         onClick={() => paginate(-1)}
-        className="hidden lg:flex absolute left-6 top-1/2 -translate-y-1/2 h-12 w-12 items-center justify-center rounded-full bg-white/20 hover:bg-white/40 text-white backdrop-blur-md transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]"
+        className="hidden lg:flex absolute left-6 top-1/2 -translate-y-1/2 h-12 w-12 items-center justify-center rounded-full bg-white/20 hover:bg-white/40 text-white backdrop-blur-md transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         aria-label="Previous slide"
       >
         <ChevronLeft size={28} />
       </button>
       <button
         onClick={() => paginate(1)}
-        className="hidden lg:flex absolute right-6 top-1/2 -translate-y-1/2 h-12 w-12 items-center justify-center rounded-full bg-white/20 hover:bg-white/40 text-white backdrop-blur-md transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]"
+        className="hidden lg:flex absolute right-6 top-1/2 -translate-y-1/2 h-12 w-12 items-center justify-center rounded-full bg-white/20 hover:bg-white/40 text-white backdrop-blur-md transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         aria-label="Next slide"
       >
         <ChevronRight size={28} />
       </button>
 
-      {/* Slide Indicators */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
         {slides.map((_, i) => (
           <button
@@ -135,7 +125,7 @@ export default function HeroCarousel() {
             aria-label={`Go to slide ${i + 1}`}
             className={clsx(
               "h-2 rounded-full transition-all",
-              i === index ? "bg-[var(--primary)] w-6" : "bg-white/40 w-2"
+              i === index ? "bg-primary w-6" : "bg-white/40 w-2"
             )}
           />
         ))}

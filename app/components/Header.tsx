@@ -79,9 +79,7 @@ export default function Header() {
       />
 
       <motion.header
-        className={clsx(
-          "fixed inset-x-0 top-0 z-50 flex items-center bg-white/95 backdrop-blur-md shadow-sm ring-1 ring-gray-200 text-gray-800 dark:bg-gray-900/90 dark:text-gray-100 transition-colors duration-300 px-4 md:px-8 py-3 md:py-5"
-        )}
+        className="fixed inset-x-0 top-0 z-50 flex items-center bg-white/95 backdrop-blur-md shadow-sm ring-1 ring-gray-200 text-gray-800 transition-colors duration-300 px-4 md:px-8 py-3 md:py-5"
         initial={{ y: -80 }}
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 100, damping: 15 }}
@@ -96,7 +94,7 @@ export default function Header() {
                 href={href}
                 className={clsx(
                   linkBase,
-                  "bg-black/5 text-gray-800 hover:bg-accent hover:text-white dark:bg-white/10 dark:text-gray-100"
+                  "bg-black/5 text-gray-800 hover:bg-accent hover:text-white"
                 )}
                 variants={navItemVariants}
                 initial="hidden"
@@ -126,7 +124,7 @@ export default function Header() {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed inset-0 z-50 flex flex-col bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100"
+            className="fixed inset-0 z-50 flex flex-col bg-white text-gray-800"
             initial="hidden"
             animate="visible"
             exit="exit"
@@ -151,7 +149,7 @@ export default function Header() {
                   key={href}
                   href={href}
                   onClick={() => setOpen(false)}
-                  className="w-3/4 rounded-full bg-gray-100 py-4 text-center text-gray-700 hover:bg-accent hover:text-white transition dark:bg-white/10 dark:text-gray-200 dark:hover:bg-accent"
+                  className="w-3/4 rounded-full bg-gray-100 py-4 text-center text-gray-700 hover:bg-accent hover:text-white transition"
                   variants={navItemVariants}
                   initial="hidden"
                   animate="visible"
