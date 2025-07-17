@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import {
   motion,
   AnimatePresence,
-  easeOut,
   Variants,
-  TargetAndTransition,
+  useReducedMotion,
 } from "framer-motion";
 import clsx from "clsx";
 import Logo from "./Logo";
@@ -15,40 +16,58 @@ import Logo from "./Logo";
 const links = [
   { href: "/", label: "Home" },
   { href: "/products", label: "Products" },
-  { href: "/services", label: "Services" },
   { href: "/about", label: "About Us" },
+  { href: "/services", label: "Services" },
   { href: "/projects", label: "Projects" },
   { href: "/contact", label: "Contact" },
 ];
 
-const navItemVariants: Variants = {
+const desktopNavVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const desktopNavItem: Variants = {
   hidden: { opacity: 0, y: -20 },
-  visible: (i: number): TargetAndTransition => ({
+  visible: {
     opacity: 1,
     y: 0,
-    transition: { delay: 0.1 * i, duration: 0.5, ease: easeOut },
-  }),
+    transition: { duration: 0.35, ease: "easeOut" },
+  },
 };
 
 const drawerVariants: Variants = {
   hidden: { x: "100%" },
   visible: {
     x: 0,
-    transition: { type: "spring", damping: 25, stiffness: 120 },
+    transition: { type: "spring", damping: 25, stiffness: 240 },
   },
   exit: {
     x: "100%",
-    transition: { type: "spring", damping: 25, stiffness: 120 },
+    transition: { type: "spring", damping: 25, stiffness: 240 },
   },
 };
 
+function isActive(pathname: string, href: string) {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(href + "/");
+}
+
 export default function Header() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const menuBtnRef = useRef<HTMLButtonElement>(null);
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -65,8 +84,38 @@ export default function Header() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  useEffect(() => {
+    const { style } = document.body;
+    const prev = style.overflow;
+    style.overflow = open ? "hidden" : prev || "";
+    return () => {
+      style.overflow = prev;
+    };
+  }, [open]);
+
   const linkBase =
     "rounded-full px-4 py-1.5 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70";
+
+  const desktopLinkClasses = (active: boolean) =>
+    clsx(
+      linkBase,
+      active
+        ? "bg-accent text-white"
+        : "bg-black/5 text-gray-800 hover:bg-accent hover:text-white"
+    );
+
+  const mobileLinkClasses = (active: boolean) =>
+    clsx(
+      "w-3/4 rounded-full py-4 text-center transition focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70",
+      active
+        ? "bg-accent text-white"
+        : "bg-gray-100 text-gray-700 hover:bg-accent hover:text-white"
+    );
+
+  // 👇 switched md:* → lg:* so the larger padding applies at 1024+
+  const headerPad = scrolled
+    ? "py-2 lg:py-3 shadow-sm ring-1 ring-gray-200"
+    : "py-3 lg:py-5";
 
   return (
     <>
@@ -75,58 +124,78 @@ export default function Header() {
           "fixed inset-x-0 top-0 z-[60] origin-top bg-accent",
           scrolled ? "h-1" : "h-0"
         )}
-        initial={{ scaleY: 0 }}
+        initial={false}
         animate={{ scaleY: scrolled ? 1 : 0 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.25 }}
       />
 
       <motion.header
-        className="fixed inset-x-0 top-0 z-50 flex items-center bg-white/95 backdrop-blur-md shadow-sm ring-1 ring-gray-200 text-gray-800 transition-colors duration-300 px-4 md:px-8 py-3 md:py-5"
-        initial={{ y: -80 }}
-        animate={{ y: 0 }}
+        className={clsx(
+          // 👇 md:px-8 → lg:px-8 (optional but keeps sizing changes aligned to 1024+)
+          "fixed inset-x-0 top-0 z-50 flex items-center bg-white/95 backdrop-blur-md text-gray-800 transition-colors duration-300 px-4 lg:px-8",
+          headerPad
+        )}
+        initial={shouldReduceMotion ? false : { y: -80 }}
+        animate={shouldReduceMotion ? {} : { y: 0 }}
         transition={{ type: "spring", stiffness: 100, damping: 15 }}
       >
         <div className="container mx-auto flex flex-1 items-center justify-between">
           <Logo />
 
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-            {links.map(({ href, label }, i) => (
-              <motion.a
-                key={href}
-                href={href}
-                className={clsx(
-                  linkBase,
-                  "bg-black/5 text-gray-800 hover:bg-accent hover:text-white"
-                )}
-                variants={navItemVariants}
-                initial="hidden"
-                animate="visible"
-                custom={i}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {label}
-              </motion.a>
-            ))}
-          </nav>
+          {/* 👇 hidden until lg; shows full nav ≥1024px */}
+          <motion.ul
+            className="hidden items-center gap-6 text-sm font-medium lg:flex"
+            variants={desktopNavVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {links.map(({ href, label }) => {
+              const active = isActive(pathname, href);
+              return (
+                <motion.li key={href} variants={desktopNavItem}>
+                  <Link
+                    href={href}
+                    className={desktopLinkClasses(active)}
+                    aria-current={active ? "page" : undefined}
+                  >
+                    {label}
+                  </Link>
+                </motion.li>
+              );
+            })}
+          </motion.ul>
 
+          {/* 👇 show hamburger <1024px */}
           <motion.button
             ref={menuBtnRef}
             onClick={() => setOpen(true)}
             aria-label="Open mobile menu"
-            className="md:hidden"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+            className="lg:hidden"
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.1 }}
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.9 }}
           >
             <Menu size={28} />
           </motion.button>
         </div>
       </motion.header>
 
+      {/* spacer below fixed header; align breakpoints */}
+      <div
+        aria-hidden="true"
+        className={clsx(
+          "w-full",
+          scrolled
+            ? "h-[calc(theme(spacing.8)+0.25rem)] lg:h-[calc(theme(spacing.12)+0.25rem)]"
+            : "h-16 lg:h-20"
+        )}
+      />
+
       <AnimatePresence>
         {open && (
           <motion.div
             className="fixed inset-0 z-50 flex flex-col bg-white text-gray-800"
+            role="dialog"
+            aria-modal="true"
             initial="hidden"
             animate="visible"
             exit="exit"
@@ -139,29 +208,31 @@ export default function Header() {
               }}
               className="self-end p-4"
               aria-label="Close menu"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+              whileHover={shouldReduceMotion ? undefined : { scale: 1.1 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.9 }}
             >
               <X size={28} />
             </motion.button>
 
-            <nav className="mt-6 flex flex-1 flex-col items-center justify-center gap-6 text-lg font-medium">
-              {links.map(({ href, label }, i) => (
-                <motion.a
-                  key={href}
-                  href={href}
-                  onClick={() => setOpen(false)}
-                  className="w-3/4 rounded-full bg-gray-100 py-4 text-center text-gray-700 hover:bg-accent hover:text-white transition"
-                  variants={navItemVariants}
-                  initial="hidden"
-                  animate="visible"
-                  custom={i}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {label}
-                </motion.a>
-              ))}
+            <nav
+              className="mt-2 flex flex-1 flex-col items-center justify-center gap-6 text-lg font-medium"
+              role="menu"
+            >
+              {links.map(({ href, label }) => {
+                const active = isActive(pathname, href);
+                return (
+                  <Link
+                    key={href}
+                    href={href}
+                    onClick={() => setOpen(false)}
+                    className={mobileLinkClasses(active)}
+                    aria-current={active ? "page" : undefined}
+                    role="menuitem"
+                  >
+                    {label}
+                  </Link>
+                );
+              })}
             </nav>
           </motion.div>
         )}

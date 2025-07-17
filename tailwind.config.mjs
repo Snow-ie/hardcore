@@ -14,13 +14,13 @@ const config = {
       padding: {
         DEFAULT: "1.5rem",
         sm: "3rem",
-        lg: "7rem",
+        lg: "5rem",
         "large-desktop": "0",
       },
     },
     extend: {
       colors: {
-        primary: "#6dc032", 
+        primary: "#6dc032",
         secondary: "#FFA737",
         dark: "#2D2D2A",
         plain: "#F1F3F9",

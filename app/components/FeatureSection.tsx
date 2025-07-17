@@ -39,84 +39,95 @@ const fadeUp: Variants = {
   }),
 };
 
+const imageVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.95, y: 20 },
+  show: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { delay: 0.45, duration: 0.7, ease: [0.25, 0.1, 0.25, 1] },
+  },
+};
+
 export default function FeatureSection() {
   return (
     <motion.section
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, amount: 0.2 }}
-      className="relative isolate overflow-hidden bg-[#d8d7ec]"
+      viewport={{ once: true, amount: 0.25 }}
+      className="relative isolate  py-20"
     >
-      <Image
-        src="/images/feature.jpg"
-        alt=""
-        fill
-        sizes="100vw"
-        priority
-        className="object-cover object-top md:object-right opacity-30 md:opacity-100 pointer-events-none select-none"
-      />
+      <div className="container mx-auto grid items-center gap-16 md:grid-cols-2">
+        <div>
+          <motion.h2
+            variants={fadeUp}
+            custom={0}
+            className="text-3xl font-bold text-dark md:text-4xl"
+          >
+            Identification and Authentication
+          </motion.h2>
 
-      <div className="absolute inset-0 bg-white/60 md:bg-transparent" />
+          <motion.p
+            variants={fadeUp}
+            custom={1}
+            className="mt-3 max-w-md text-gray-700"
+          >
+            Our management consulting services focus on our clients’ most
+            critical issues and opportunities.
+          </motion.p>
 
-      <div className="relative z-10 mx-auto container px-6 py-20 ">
-        <div className="md:grid md:grid-cols-2 md:gap-16">
-          <div>
-            <motion.h2
-              variants={fadeUp}
-              custom={0}
-              className="text-3xl md:text-4xl font-bold text-dark"
-            >
-              Identification and Authentication
-            </motion.h2>
-
-            <motion.p
-              variants={fadeUp}
-              custom={1}
-              className="mt-3 max-w-md text-gray-700"
-            >
-              Our management consulting services focus on our clients’ most
-              critical issues and opportunities.
-            </motion.p>
-
-            <ul className="mt-12 space-y-10">
-              {features.map(({ icon: Icon, title, description }, i) => (
-                <motion.li
-                  key={title}
-                  variants={fadeUp}
-                  custom={i + 2}
-                  className="flex items-start gap-5"
-                >
-                  <span className="shrink-0 rounded-full bg-white p-3 shadow">
-                    <Icon className="h-8 w-8 text-accent" />
-                  </span>
-                  <div>
-                    <h3 className="font-semibold uppercase tracking-wide text-dark">
-                      {title}
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-gray-700">
-                      {description}
-                    </p>
-                  </div>
-                </motion.li>
-              ))}
-            </ul>
-
-            <motion.div
-              variants={fadeUp}
-              custom={features.length + 2}
-              className="mt-12"
-            >
-              <Link
-                href="/product"
-                className="inline-flex items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-white shadow hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
+          <ul className="mt-12 space-y-10">
+            {features.map(({ icon: Icon, title, description }, i) => (
+              <motion.li
+                key={title}
+                variants={fadeUp}
+                custom={i + 2}
+                className="flex items-start gap-5"
               >
-                Learn More
-              </Link>
-            </motion.div>
-          </div>
+                <span className="shrink-0 rounded-full bg-white p-3 shadow">
+                  <Icon className="h-8 w-8 text-accent" />
+                </span>
+                <div>
+                  <h3 className="font-semibold uppercase tracking-wide text-dark">
+                    {title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                    {description}
+                  </p>
+                </div>
+              </motion.li>
+            ))}
+          </ul>
 
-          <div className="hidden md:block" />
+          <motion.div
+            variants={fadeUp}
+            custom={features.length + 2}
+            className="mt-12"
+          >
+            <Link
+              href="/product"
+              className="inline-flex items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-white shadow hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
+            >
+              Learn More
+            </Link>
+          </motion.div>
         </div>
+
+        <motion.div
+          variants={imageVariants}
+          className="relative mx-auto w-full max-w-xl overflow-hidden rounded-2xl md:mt-0"
+        >
+          <div className="relative aspect-[4/3] w-full">
+            <Image
+              src="/images/feature.jpg"
+              alt="Identification & authentication illustration"
+              fill
+              sizes="(min-width:1024px) 600px, (min-width:640px) 80vw, 100vw"
+              className="object-contain object-center"
+              priority
+            />
+          </div>
+        </motion.div>
       </div>
     </motion.section>
   );
