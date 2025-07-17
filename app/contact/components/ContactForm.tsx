@@ -98,7 +98,6 @@ export default function ContactForm({
 
   const fieldError = (field: keyof FormValues) => errors[field];
 
-  /* Tailwind utility strings (central so we change once) */
   const baseInput =
     "w-full rounded-md border border-border bg-background p-3 text-sm shadow-sm placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus:border-accent dark:bg-surface";
   const errorInput =
@@ -115,7 +114,6 @@ export default function ContactForm({
       aria-busy={status === "submitting"}
       className={`mx-auto w-full max-w-xl space-y-6 rounded-xl bg-white p-6 shadow-lg dark:bg-surface sm:p-8 ${className}`}
     >
-      {/* Heading */}
       <header className="space-y-2 text-center sm:text-left">
         <h2 className="text-lg font-semibold text-foreground">{title}</h2>
         {subtitle && (
@@ -123,9 +121,7 @@ export default function ContactForm({
         )}
       </header>
 
-      {/* Name + Email */}
       <div className="grid gap-6 sm:grid-cols-2">
-        {/* Name */}
         <div>
           <label
             htmlFor="contact-name"
@@ -191,7 +187,6 @@ export default function ContactForm({
         </div>
       </div>
 
-      {/* Subject */}
       <div>
         <label
           htmlFor="contact-subject"
@@ -223,7 +218,6 @@ export default function ContactForm({
         )}
       </div>
 
-      {/* Message */}
       <div>
         <label
           htmlFor="contact-message"
@@ -257,7 +251,6 @@ export default function ContactForm({
         )}
       </div>
 
-      {/* Submit */}
       <div>
         <button
           type="submit"
@@ -268,7 +261,6 @@ export default function ContactForm({
         </button>
       </div>
 
-      {/* Status feedback (reserved height prevents layout shift) */}
       <div
         role="status"
         aria-live="polite"

@@ -5,10 +5,17 @@ import { motion } from "framer-motion";
 export default function ContactHero() {
   return (
     <section
-      className="relative isolate flex min-h-[40vh] items-center justify-center overflow-hidden bg-center bg-cover bg-no-repeat"
+      className="relative isolate flex min-h-[40vh] md:min-h-[60vh] items-center justify-center overflow-hidden bg-center bg-cover bg-no-repeat"
       style={{ backgroundImage: "url('/images/contact-hero.png')" }}
     >
-      <span className="absolute inset-0 bg-[var(--primary)]/60 mix-blend-multiply" />
+      <span
+        aria-hidden="true"
+        className="absolute inset-0 bg-[rgba(4,27,20,0.80)] mix-blend-multiply"
+      />
+      <span
+        aria-hidden="true"
+        className="absolute inset-0 bg-gradient-to-t from-[rgba(4,27,20,0.90)] via-[rgba(6,48,31,0.40)] to-transparent"
+      />
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
