@@ -15,8 +15,8 @@ import Logo from "./Logo";
 
 const links = [
   { href: "/", label: "Home" },
-  { href: "/products", label: "Products" },
   { href: "/about", label: "About Us" },
+  { href: "/products", label: "Products" },
   { href: "/services", label: "Services" },
   { href: "/projects", label: "Projects" },
   { href: "/contact", label: "Contact" },
@@ -94,25 +94,24 @@ export default function Header() {
   }, [open]);
 
   const linkBase =
-    "rounded-full px-4 py-1.5 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70";
+    "rounded-full px-4 py-1.5 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70";
 
   const desktopLinkClasses = (active: boolean) =>
     clsx(
       linkBase,
       active
-        ? "bg-accent text-white"
-        : "bg-black/5 text-gray-800 hover:bg-accent hover:text-white"
+        ? "bg-primary text-white"
+        : "bg-black/5 text-gray-800 hover:bg-primary hover:text-white"
     );
 
   const mobileLinkClasses = (active: boolean) =>
     clsx(
-      "w-3/4 rounded-full py-4 text-center transition focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70",
+      "w-3/4 rounded-full py-4 text-center transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
       active
-        ? "bg-accent text-white"
-        : "bg-gray-100 text-gray-700 hover:bg-accent hover:text-white"
+        ? "bg-primary text-white"
+        : "bg-gray-100 text-gray-700 hover:bg-primary hover:text-white"
     );
 
-  // 👇 switched md:* → lg:* so the larger padding applies at 1024+
   const headerPad = scrolled
     ? "py-2 lg:py-3 shadow-sm ring-1 ring-gray-200"
     : "py-3 lg:py-5";
@@ -121,7 +120,7 @@ export default function Header() {
     <>
       <motion.span
         className={clsx(
-          "fixed inset-x-0 top-0 z-[60] origin-top bg-accent",
+          "fixed left-0 right-0 top-0 z-50 origin-top bg-primary",
           scrolled ? "h-1" : "h-0"
         )}
         initial={false}
@@ -131,8 +130,7 @@ export default function Header() {
 
       <motion.header
         className={clsx(
-          // 👇 md:px-8 → lg:px-8 (optional but keeps sizing changes aligned to 1024+)
-          "fixed inset-x-0 top-0 z-50 flex items-center bg-white/95 backdrop-blur-md text-gray-800 transition-colors duration-300 px-4 lg:px-8",
+          "fixed top-0 left-0 right-0 z-50 flex items-center bg-white/95 backdrop-blur-md text-gray-800 transition-colors duration-300 ",
           headerPad
         )}
         initial={shouldReduceMotion ? false : { y: -80 }}
@@ -142,7 +140,6 @@ export default function Header() {
         <div className="container mx-auto flex flex-1 items-center justify-between">
           <Logo />
 
-          {/* 👇 hidden until lg; shows full nav ≥1024px */}
           <motion.ul
             className="hidden items-center gap-6 text-sm font-medium lg:flex"
             variants={desktopNavVariants}
@@ -165,7 +162,6 @@ export default function Header() {
             })}
           </motion.ul>
 
-          {/* 👇 show hamburger <1024px */}
           <motion.button
             ref={menuBtnRef}
             onClick={() => setOpen(true)}
@@ -179,7 +175,6 @@ export default function Header() {
         </div>
       </motion.header>
 
-      {/* spacer below fixed header; align breakpoints */}
       <div
         aria-hidden="true"
         className={clsx(

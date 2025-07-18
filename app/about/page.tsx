@@ -1,9 +1,6 @@
-// app/about/page.tsx
-// About Hardcore Biometric Systems (responsive, ESLint-safe)
-
 "use client";
 
-import { Fragment } from "react";
+import Image from "next/image";
 import {
   Award,
   Handshake,
@@ -11,7 +8,7 @@ import {
   Users as UsersIcon,
   ShieldCheck,
 } from "lucide-react";
-import { motion } from "framer-motion"; // optional; yank if you’re not using Framer
+import { motion, Variants } from "framer-motion";
 
 const Section = ({
   id,
@@ -22,9 +19,11 @@ const Section = ({
   title: string;
   children: React.ReactNode;
 }) => (
-  <section id={id} className="py-20">
-    <div className="container mx-auto max-w-6xl px-4">
-      <h2 className="mb-8 text-center text-3xl font-bold md:text-4xl">
+  <section id={id} className="relative overflow-hidden py-24 animate-fade-in">
+    {/* faint radial gradient backdrop */}
+    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
+    <div className="relative container mx-auto max-w-6xl px-4">
+      <h2 className="mb-8 text-center text-3xl font-bold text-primary md:text-4xl">
         {title}
       </h2>
       {children}
@@ -33,8 +32,7 @@ const Section = ({
 );
 
 export default function AboutPage() {
-  // quick motion variants (optional)
-  const fadeUp = {
+  const fadeUp: Variants = {
     hidden: { opacity: 0, y: 24 },
     visible: (i: number) => ({
       opacity: 1,
@@ -44,47 +42,40 @@ export default function AboutPage() {
   };
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      {/* 1 ── ABOUT US  ────────────────────────────────────── */}
+    <main className="py-24 container mx-auto">
       <Section id="about-us" title="About Us">
-        <motion.p
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeUp}
-          custom={0}
-          className="mx-auto max-w-3xl text-lg leading-relaxed"
-        >
-          Hardcore&nbsp;Biometric&nbsp;Systems is a globally recognized IT
-          solutions provider, established in&nbsp;2007. Over the
-          past&nbsp;18&nbsp;years, we have delivered projects across Nigeria and
-          internationally—earning a strong reputation for excellence and
-          innovation. By&nbsp;2019, we reported a revenue
-          of&nbsp;$40&nbsp;million and grew to a team of&nbsp;200+ professionals
-          operating in multiple countries.
-        </motion.p>
-        <motion.p
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeUp}
-          custom={1}
-          className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed"
-        >
-          We specialize in helping organizations craft IT strategies aligned
-          with core business objectives. Leveraging deep industry know-how in
-          security and systems management, we deliver sustainable value to
-          government agencies, institutions, and private enterprises.
-        </motion.p>
+        {[0, 1].map((idx) => (
+          <motion.p
+            key={idx}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            custom={idx}
+            className=" text-lg leading-relaxed"
+          >
+            {idx === 0
+              ? `Hardcore Biometric Systems is a globally recognized IT
+                solutions provider, established in 2007. Over the past 18 years,
+                we have delivered projects across Nigeria and internationally
+                earning a strong reputation for excellence and innovation. By 2019,
+                revenue surpassed $40 million with 200+ professionals operating
+                worldwide.`
+              : `We specialize in helping organizations craft IT strategies aligned
+                with core business objectives. Leveraging deep industry know-how in
+                security and systems management, we deliver sustainable value to
+                government agencies, institutions, and private enterprises.`}
+          </motion.p>
+        ))}
       </Section>
 
-      {/* 2 ── WHY CHOOSE US  ─────────────────────────────── */}
+      {/* 2 ── WHY CHOOSE US */}
       <Section id="why-choose" title="Why Choose Hardcore Biometric Systems?">
         <div className="grid gap-8 md:grid-cols-2">
           {[
             {
               icon: Handshake,
-              text: "Strong, long-term partnerships—your success is our success.",
+              text: "Strong, long-term partnerships your success is our success.",
             },
             {
               icon: Award,
@@ -100,22 +91,21 @@ export default function AboutPage() {
             },
           ].map((item, i) => (
             <motion.div
-              key={i}
+              key={item.text}
               custom={i}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               variants={fadeUp}
-              className="flex items-start gap-4 rounded-lg border border-foreground/10 bg-surface/40 p-6"
+              className="flex items-start gap-4 rounded-xl border border-foreground/10 bg-white/60 p-6 backdrop-blur-md"
             >
-              <item.icon className="h-8 w-8 shrink-0 text-[var(--accent)]" />
+              <item.icon className="h-8 w-8 shrink-0 text-primary" />
               <p className="leading-relaxed">{item.text}</p>
             </motion.div>
           ))}
         </div>
       </Section>
 
-      {/* 3 ── OUR OFFERINGS ──────────────────────────────── */}
       <Section id="offerings" title="Our Offerings">
         <motion.p
           initial="hidden"
@@ -126,7 +116,7 @@ export default function AboutPage() {
           className="mx-auto max-w-3xl text-lg leading-relaxed"
         >
           In today&apos;s fast-moving marketplace, organizations crave partners
-          who convert ideas into impact—quickly and cost-effectively. We deliver
+          who convert ideas into impact quickly and cost effectively. We deliver
           managed solutions, custom software, and business applications designed
           to accelerate growth.
         </motion.p>
@@ -143,18 +133,18 @@ export default function AboutPage() {
               whileInView="visible"
               viewport={{ once: true }}
               variants={fadeUp}
-              className="flex flex-col items-center gap-4 rounded-lg border border-foreground/10 bg-surface/40 p-8 text-center"
+              className="flex flex-col items-center gap-4 rounded-xl border border-foreground/10 bg-white/60 p-8 text-center backdrop-blur-md"
             >
-              <card.icon className="h-10 w-10 text-[var(--accent)]" />
+              <card.icon className="h-10 w-10 text-primary" />
               <h3 className="font-semibold">{card.label}</h3>
             </motion.div>
           ))}
         </div>
       </Section>
 
-      {/* 4 ── OUR TEAM  ──────────────────────────────────── */}
+      {/* 4 ── OUR TEAM */}
       <Section id="team" title="Our Team">
-        <div className="grid gap-12 lg:grid-cols-2">
+        <div className=" grid gap-12 lg:grid-cols-2">
           {/* Management summary */}
           <motion.div
             custom={0}
@@ -164,57 +154,58 @@ export default function AboutPage() {
             variants={fadeUp}
             className="space-y-4"
           >
-            <h3 className="text-xl font-semibold">Management</h3>
+            <h3 className="text-xl font-semibold text-primary">Management</h3>
             <ul className="list-inside list-disc space-y-2 text-lg">
+              <li>CEO – provides strategic direction and drives innovation.</li>
               <li>
-                CEO&nbsp;– provides strategic direction and drives innovation.
+                CTO – leads our technical vision, ensuring top-tier quality.
               </li>
               <li>
-                CTO&nbsp;– leads our technical vision, ensuring top-tier
-                quality.
+                Personal Assistants – keep day-to-day operations seamless.
               </li>
-              <li>
-                Personal Assistants&nbsp;– keep day-to-day operations seamless.
-              </li>
-              <li>Procurement Manager&nbsp;– sources resources efficiently.</li>
-              <li>
-                Project Manager&nbsp;– ensures timely delivery and success.
-              </li>
+              <li>Procurement Manager – sources resources efficiently.</li>
+              <li>Project Manager – ensures timely delivery and success.</li>
             </ul>
           </motion.div>
 
-          {/* Departments */}
           <motion.div
             custom={1}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeUp}
-            className="space-y-4"
+            className="grid grid-cols-2 gap-6"
           >
-            <h3 className="text-xl font-semibold">Key Departments</h3>
-            <ul className="list-inside list-disc space-y-2 text-lg">
-              <li>
-                Development&nbsp;– frontend &amp; backend engineers crafting
-                robust solutions.
-              </li>
-              <li>
-                IT Infrastructure&nbsp;– architects maintaining
-                high-availability systems.
-              </li>
-              <li>
-                Quality Assurance&nbsp;– guarantees every release meets
-                expectations.
-              </li>
-              <li>
-                Administrative / Legal&nbsp;– HR, finance, compliance support.
-              </li>
-            </ul>
+            {[
+              { name: "Chinedu Okoye", role: "CEO", img: "/images/ceo.jpg" },
+              { name: "Adaeze Musa", role: "CTO", img: "/images/cto.jpg" },
+              {
+                name: "Seyi Bello",
+                role: "Project Mgr",
+                img: "/images/pm.jpg",
+              },
+              { name: "Ngozi Umar", role: "QA Lead", img: "/images/qa.jpg" },
+            ].map(({ name, role, img }) => (
+              <div
+                key={name}
+                className="flex flex-col items-center rounded-xl bg-white/60 p-4 backdrop-blur-md"
+              >
+                <Image
+                  src={img}
+                  alt={name}
+                  width={180}
+                  height={180}
+                  className="aspect-square rounded-full object-cover"
+                />
+                <p className="mt-3 font-semibold">{name}</p>
+                <p className="text-sm text-gray-600">{role}</p>
+              </div>
+            ))}
           </motion.div>
         </div>
       </Section>
 
-      {/* 5 ── CLIENTS  ───────────────────────────────────── */}
+      {/* 5 ── CLIENTS */}
       <Section id="clients" title="Clients">
         <motion.p
           initial="hidden"
@@ -222,12 +213,32 @@ export default function AboutPage() {
           viewport={{ once: true }}
           variants={fadeUp}
           custom={0}
-          className="mx-auto max-w-3xl text-lg leading-relaxed"
+          className="text-lg text-center leading-relaxed"
         >
-          Hardcore&nbsp;Biometric&nbsp;Systems partners with prestigious
-          organizations across multiple sectors. (Insert logo strip or carousel
-          here.)
+          Hardcore Biometric Systems partners with prestigious organizations
+          across multiple sectors.
         </motion.p>
+
+        {/* placeholder logo strip */}
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-8 opacity-80">
+          {[
+            "/images/state-security-service.png",
+            "/images/nigeria-immigration-service.png",
+            "/images/us-department-of-state.png",
+            "/images/nigeria-police-force.png",
+            "/images/ghana-coat-of-arms.png",
+            "/images/nigerian-army.png",
+          ].map((src) => (
+            <Image
+              key={src}
+              src={src}
+              alt="Client logo"
+              width={120}
+              height={60}
+              className="object-contain"
+            />
+          ))}
+        </div>
       </Section>
     </main>
   );

@@ -55,7 +55,7 @@ export default function FeatureSection() {
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, amount: 0.25 }}
-      className="relative isolate  py-20"
+      className="relative isolate py-24 animate-fade-in"
     >
       <div className="container mx-auto grid items-center gap-16 md:grid-cols-2">
         <div>

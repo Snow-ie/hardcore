@@ -17,13 +17,55 @@ type Status = "idle" | "submitting" | "success" | "error";
 export type ContactFormProps = {
   title?: string;
   subtitle?: string;
-  /** Optional class to extend outer wrapper. */
   className?: string;
-  /** Called on successful submit (after fake/real send). */
   onSubmitSuccess?: (values: FormValues) => void;
-  /** Replace with your real async sender. Receives form values, must throw on failure. */
   onSend?: (values: FormValues) => Promise<void>;
 };
+
+/* Field config for mapping */
+type FieldType = "text" | "email" | "textarea";
+interface FieldDef {
+  name: keyof FormValues;
+  label: string;
+  type: FieldType;
+  placeholder?: string;
+  autoComplete?: string;
+  rows?: number; // textarea only
+  colSpan?: string; // e.g. "sm:col-span-2"
+}
+
+const fieldDefs: FieldDef[] = [
+  {
+    name: "name",
+    label: "Your name",
+    type: "text",
+    placeholder: "Jane Doe",
+    autoComplete: "name",
+  },
+  {
+    name: "email",
+    label: "Your email",
+    type: "email",
+    placeholder: "you@example.com",
+    autoComplete: "email",
+  },
+  {
+    name: "subject",
+    label: "Subject",
+    type: "text",
+    placeholder: "Project inquiry",
+    autoComplete: "off",
+    colSpan: "sm:col-span-2",
+  },
+  {
+    name: "message",
+    label: "Message",
+    type: "textarea",
+    placeholder: "Tell us what you need help with...",
+    rows: 6,
+    colSpan: "sm:col-span-2",
+  },
+];
 
 /* ─ Component ───────────────────────────────────────── */
 export default function ContactForm({
@@ -121,134 +163,61 @@ export default function ContactForm({
         )}
       </header>
 
+      {/* MAPPED FIELDS */}
       <div className="grid gap-6 sm:grid-cols-2">
-        <div>
-          <label
-            htmlFor="contact-name"
-            className="mb-1 block text-sm font-medium text-foreground"
-          >
-            Your name
-          </label>
-          <input
-            id="contact-name"
-            name="name"
-            value={values.name}
-            onChange={handleChange}
-            placeholder="Jane Doe"
-            required
-            autoComplete="name"
-            aria-invalid={!!fieldError("name")}
-            aria-describedby={
-              fieldError("name") ? "contact-name-err" : undefined
-            }
-            className={`${baseInput} ${fieldError("name") ? errorInput : ""}`}
-          />
-          {fieldError("name") && (
-            <p
-              id="contact-name-err"
-              className="mt-1 text-xs font-medium text-red-600"
-            >
-              {fieldError("name")}
-            </p>
-          )}
-        </div>
+        {fieldDefs.map((f) => {
+          const err = fieldError(f.name);
+          const id = `contact-${f.name}`;
+          const errId = `${id}-err`;
+          const inputCls = `${baseInput} ${err ? errorInput : ""}`;
+          const colSpan = f.colSpan ?? "";
 
-        {/* Email */}
-        <div>
-          <label
-            htmlFor="contact-email"
-            className="mb-1 block text-sm font-medium text-foreground"
-          >
-            Your email
-          </label>
-          <input
-            id="contact-email"
-            name="email"
-            type="email"
-            value={values.email}
-            onChange={handleChange}
-            placeholder="you@example.com"
-            required
-            autoComplete="email"
-            aria-invalid={!!fieldError("email")}
-            aria-describedby={
-              fieldError("email") ? "contact-email-err" : undefined
-            }
-            className={`${baseInput} ${fieldError("email") ? errorInput : ""}`}
-          />
-          {fieldError("email") && (
-            <p
-              id="contact-email-err"
-              className="mt-1 text-xs font-medium text-red-600"
-            >
-              {fieldError("email")}
-            </p>
-          )}
-        </div>
-      </div>
+          return (
+            <div key={f.name as string} className={colSpan}>
+              <label
+                htmlFor={id}
+                className="mb-1 block text-sm font-medium text-foreground"
+              >
+                {f.label}
+              </label>
 
-      <div>
-        <label
-          htmlFor="contact-subject"
-          className="mb-1 block text-sm font-medium text-foreground"
-        >
-          Subject
-        </label>
-        <input
-          id="contact-subject"
-          name="subject"
-          value={values.subject}
-          onChange={handleChange}
-          placeholder="Project inquiry"
-          required
-          autoComplete="off"
-          aria-invalid={!!fieldError("subject")}
-          aria-describedby={
-            fieldError("subject") ? "contact-subject-err" : undefined
-          }
-          className={`${baseInput} ${fieldError("subject") ? errorInput : ""}`}
-        />
-        {fieldError("subject") && (
-          <p
-            id="contact-subject-err"
-            className="mt-1 text-xs font-medium text-red-600"
-          >
-            {fieldError("subject")}
-          </p>
-        )}
-      </div>
+              {f.type === "textarea" ? (
+                <textarea
+                  id={id}
+                  name={f.name}
+                  value={values[f.name]}
+                  onChange={handleChange}
+                  placeholder={f.placeholder}
+                  required
+                  rows={f.rows ?? 4}
+                  aria-invalid={!!err}
+                  aria-describedby={err ? errId : undefined}
+                  className={`${inputCls} resize-y`}
+                />
+              ) : (
+                <input
+                  id={id}
+                  name={f.name}
+                  type={f.type}
+                  value={values[f.name]}
+                  onChange={handleChange}
+                  placeholder={f.placeholder}
+                  required
+                  autoComplete={f.autoComplete}
+                  aria-invalid={!!err}
+                  aria-describedby={err ? errId : undefined}
+                  className={inputCls}
+                />
+              )}
 
-      <div>
-        <label
-          htmlFor="contact-message"
-          className="mb-1 block text-sm font-medium text-foreground"
-        >
-          Message
-        </label>
-        <textarea
-          id="contact-message"
-          name="message"
-          value={values.message}
-          onChange={handleChange}
-          placeholder="Tell us what you need help with..."
-          required
-          rows={6}
-          aria-invalid={!!fieldError("message")}
-          aria-describedby={
-            fieldError("message") ? "contact-message-err" : undefined
-          }
-          className={`${baseInput} resize-y ${
-            fieldError("message") ? errorInput : ""
-          }`}
-        />
-        {fieldError("message") && (
-          <p
-            id="contact-message-err"
-            className="mt-1 text-xs font-medium text-red-600"
-          >
-            {fieldError("message")}
-          </p>
-        )}
+              {err && (
+                <p id={errId} className="mt-1 text-xs font-medium text-red-600">
+                  {err}
+                </p>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       <div>
