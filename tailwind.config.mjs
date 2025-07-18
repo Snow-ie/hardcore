@@ -24,7 +24,6 @@ const config = {
         secondary: "#FFA737",
         dark: "#2D2D2A",
         plain: "#F1F3F9",
-        accent: "#724E91",
         line: "#00C48C",
       },
       boxShadow: {

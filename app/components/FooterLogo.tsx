@@ -6,7 +6,7 @@ type LogoProps = {
   className?: string;
 };
 
-export default function Logo({ className }: LogoProps) {
+export default function FooterLogo({ className }: LogoProps) {
   return (
     <Link
       href="/"
@@ -14,7 +14,7 @@ export default function Logo({ className }: LogoProps) {
       className={clsx("flex", className)}
     >
       <Image
-        src="/assets/h-Logo.svg"
+        src="/assets/hcb-Logo.svg"
         alt="Hardcore Biometric icon"
         width={80}
         height={80}

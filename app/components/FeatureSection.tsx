@@ -85,7 +85,7 @@ export default function FeatureSection() {
                 className="flex items-start gap-5"
               >
                 <span className="shrink-0 rounded-full bg-white p-3 shadow">
-                  <Icon className="h-8 w-8 text-accent" />
+                  <Icon className="h-8 w-8 text-primary" />
                 </span>
                 <div>
                   <h3 className="font-semibold uppercase tracking-wide text-dark">

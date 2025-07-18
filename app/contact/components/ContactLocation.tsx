@@ -2,53 +2,60 @@
 
 import Image from "next/image";
 import { MapPin } from "lucide-react";
+import clsx from "clsx";
 
 export type ContactLocationProps = {
   name?: string;
-  addressLines?: string[];
-  phone?: string;
-  email?: string;
   mapImgSrc?: string;
   mapEmbedSrc?: string;
   className?: string;
 };
 
+const FALLBACK_IMG = "/images/map-placeholder.jpg";
+const BIZ_NAME = "Hardcore Biometric Systems";
+
 export default function ContactLocation({
-  name = "Hardcore Biometric Systems",
-  mapImgSrc = "/images/map-placeholder.jpg",
+  name = BIZ_NAME,
+  mapImgSrc = FALLBACK_IMG,
   mapEmbedSrc,
   className = "",
 }: ContactLocationProps) {
   return (
     <div
-      className={`flex w-full flex-col overflow-hidden rounded-xl bg-white p-6 shadow-lg dark:bg-surface sm:p-8 ${className}`}
+      className={clsx(
+        "flex w-full flex-col overflow-hidden rounded-2xl bg-background shadow-xl",
+        "ring-1 ring-gray-200 ",
+        className
+      )}
     >
-      <h3 className="mb-4 text-lg font-semibold text-foreground">
-        Visit / Contact
+      <h3 className="bg-gradient-to-r from-primary/5 to-accent/5 py-2 text-center text-sm font-semibold tracking-wide text-foreground">
+        Visit&nbsp;/&nbsp;Contact
       </h3>
 
-      <div className="relative mb-6 aspect-[4/3] w-full overflow-hidden rounded-md border border-border">
+      <div
+        className="relative aspect-[4/3] w-full overflow-hidden rounded-xl
+                  border border-gray-300 "
+      >
         {mapEmbedSrc ? (
           <iframe
+            title={`${name} location map`}
             src={mapEmbedSrc}
             loading="lazy"
             allowFullScreen
             referrerPolicy="no-referrer-when-downgrade"
             className="h-full w-full"
-            title={`${name} location map`}
           />
         ) : (
           <>
             <Image
               src={mapImgSrc}
-              alt={`${name} map`}
               fill
-              sizes="(min-width: 1024px) 400px, 100vw"
+              alt={`${name} map`}
+              sizes="(min-width:1024px) 480px, 100vw"
               className="object-cover"
+              priority
             />
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <MapPin className="h-10 w-10 text-primary drop-shadow-[0_0_4px_rgba(0,0,0,.6)]" />
-            </div>
+            <MapPin className="absolute inset-0 m-auto h-10 w-10 text-primary drop-shadow-md" />
           </>
         )}
       </div>
