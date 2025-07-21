@@ -88,23 +88,23 @@ export default function Header() {
     return () => void (style.overflow = prev);
   }, [open]);
 
-  const linkBase =
-    "rounded-full px-4 py-1.5 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70";
+  const focusRing =
+    "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70";
 
   const desktopLinkClasses = (active: boolean) =>
     clsx(
-      linkBase,
+      "relative px-0.5 py-0.5 transition-colors duration-200",
+      focusRing,
       active
-        ? "bg-primary text-white"
-        : "bg-black/5 text-gray-800 hover:bg-primary hover:text-white"
+        ? "text-primary after:absolute after:left-0 after:-bottom-0.5 after:h-0.5 after:w-full after:bg-primary"
+        : "text-gray-800 hover:text-primary after:absolute after:left-0 after:-bottom-0.5 after:h-0.5 after:w-0 after:bg-primary hover:after:w-full after:transition-all after:duration-200"
     );
 
   const mobileLinkClasses = (active: boolean) =>
     clsx(
-      "w-3/4 rounded-full py-4 text-center transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-      active
-        ? "bg-primary text-white"
-        : "bg-gray-100 text-gray-700 hover:bg-primary hover:text-white"
+      "w-3/4 py-4 text-center transition-colors duration-200",
+      focusRing,
+      active ? "text-primary font-semibold" : "text-gray-700 hover:text-primary"
     );
 
   const headerPad = scrolled

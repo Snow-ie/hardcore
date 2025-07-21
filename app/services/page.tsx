@@ -7,8 +7,8 @@ export const metadata = {
 
 export default function ServicesPage() {
   return (
-    <main className="container mx-auto px-4 py-16">
-      <h1 className="mb-10 text-center text-4xl font-bold">Core Services</h1>
+    <main className="container mx-auto  py-24">
+      <h1 className="mt-10 text-center text-4xl font-bold">Core Services</h1>
 
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {services.map((svc) => (

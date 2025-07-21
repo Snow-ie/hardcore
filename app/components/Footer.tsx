@@ -25,7 +25,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 border-t border-line pt-4 text-center text-xs text-gray-500">
+        <div className="mt-8 border-t border-primary pt-4 text-center text-xs text-gray-500">
           © {new Date().getFullYear()} Hardcore Biometric Systems. All rights
           reserved.
         </div>
