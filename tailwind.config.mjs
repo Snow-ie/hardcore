@@ -22,6 +22,7 @@ const config = {
       colors: {
         primary: "#6dc032",
         secondary: "#FFA737",
+        accent: "#06d6a0",
         dark: "#2D2D2A",
         plain: "#F1F3F9",
         line: "#00C48C",

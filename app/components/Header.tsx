@@ -25,10 +25,7 @@ const links = [
 const desktopNavVariants: Variants = {
   hidden: {},
   visible: {
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.1,
-    },
+    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
   },
 };
 
@@ -88,9 +85,7 @@ export default function Header() {
     const { style } = document.body;
     const prev = style.overflow;
     style.overflow = open ? "hidden" : prev || "";
-    return () => {
-      style.overflow = prev;
-    };
+    return () => void (style.overflow = prev);
   }, [open]);
 
   const linkBase =
@@ -129,8 +124,11 @@ export default function Header() {
       />
 
       <motion.header
+        style={
+          { "--header-h": scrolled ? "3.25rem" : "5rem" } as React.CSSProperties
+        }
         className={clsx(
-          "fixed top-0 left-0 right-0 z-50 flex items-center bg-white/95 backdrop-blur-md text-gray-800 transition-colors duration-300 ",
+          "fixed top-0 left-0 right-0 z-50 flex items-center bg-white/95 backdrop-blur-md text-gray-800 transition-colors duration-300",
           headerPad
         )}
         initial={shouldReduceMotion ? false : { y: -80 }}
@@ -174,16 +172,6 @@ export default function Header() {
           </motion.button>
         </div>
       </motion.header>
-
-      <div
-        aria-hidden="true"
-        className={clsx(
-          "w-full",
-          scrolled
-            ? "h-[calc(theme(spacing.8)+0.25rem)] lg:h-[calc(theme(spacing.12)+0.25rem)]"
-            : "h-16 lg:h-20"
-        )}
-      />
 
       <AnimatePresence>
         {open && (

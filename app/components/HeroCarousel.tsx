@@ -90,14 +90,15 @@ export default function HeroCarousel() {
           />
 
           <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/50 to-black/80" />
-
-          <div className="absolute inset-0 flex flex-col items-start justify-end p-6 pb-32 md:p-12 md:pb-16 space-y-3 text-white drop-shadow-md">
-            <p className="text-xs md:text-sm tracking-widest uppercase text-white">
-              {slides[index].subtitle}
-            </p>
-            <h1 className="text-2xl md:text-5xl font-bold max-w-xl leading-tight">
-              {slides[index].title}
-            </h1>
+          <div className="absolute inset-0 flex flex-col justify-end">
+            <div className="container mx-auto flex flex-col items-start space-y-3 pb-32 md:pb-16 text-white drop-shadow-md">
+              <p className="text-xs md:text-sm tracking-widest uppercase">
+                {slides[index].subtitle}
+              </p>
+              <h1 className="text-2xl md:text-5xl font-bold max-w-xl leading-tight">
+                {slides[index].title}
+              </h1>
+            </div>
           </div>
         </motion.div>
       </AnimatePresence>
