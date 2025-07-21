@@ -13,6 +13,12 @@ import {
 import clsx from "clsx";
 import Logo from "./Logo";
 
+function useMounted() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  return mounted;
+}
+
 const links = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About Us" },
@@ -57,10 +63,11 @@ function isActive(pathname: string, href: string) {
 
 export default function Header() {
   const pathname = usePathname();
+  const mounted = useMounted();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const menuBtnRef = useRef<HTMLButtonElement>(null);
-  const shouldReduceMotion = useReducedMotion();
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -131,8 +138,8 @@ export default function Header() {
           "fixed top-0 left-0 right-0 z-50 flex items-center bg-white/95 backdrop-blur-md text-gray-800 transition-colors duration-300",
           headerPad
         )}
-        initial={shouldReduceMotion ? false : { y: -80 }}
-        animate={shouldReduceMotion ? {} : { y: 0 }}
+        initial={reduceMotion ? false : { y: -80 }}
+        animate={reduceMotion ? {} : { y: 0 }}
         transition={{ type: "spring", stiffness: 100, damping: 15 }}
       >
         <div className="container mx-auto flex flex-1 items-center justify-between">
@@ -145,13 +152,14 @@ export default function Header() {
             animate="visible"
           >
             {links.map(({ href, label }) => {
-              const active = isActive(pathname, href);
+              const active = mounted && isActive(pathname, href);
               return (
                 <motion.li key={href} variants={desktopNavItem}>
                   <Link
                     href={href}
-                    className={desktopLinkClasses(active)}
                     aria-current={active ? "page" : undefined}
+                    suppressHydrationWarning
+                    className={desktopLinkClasses(active)}
                   >
                     {label}
                   </Link>
@@ -165,8 +173,8 @@ export default function Header() {
             onClick={() => setOpen(true)}
             aria-label="Open mobile menu"
             className="lg:hidden"
-            whileHover={shouldReduceMotion ? undefined : { scale: 1.1 }}
-            whileTap={shouldReduceMotion ? undefined : { scale: 0.9 }}
+            whileHover={reduceMotion ? undefined : { scale: 1.1 }}
+            whileTap={reduceMotion ? undefined : { scale: 0.9 }}
           >
             <Menu size={28} />
           </motion.button>
@@ -191,8 +199,8 @@ export default function Header() {
               }}
               className="self-end p-4"
               aria-label="Close menu"
-              whileHover={shouldReduceMotion ? undefined : { scale: 1.1 }}
-              whileTap={shouldReduceMotion ? undefined : { scale: 0.9 }}
+              whileHover={reduceMotion ? undefined : { scale: 1.1 }}
+              whileTap={reduceMotion ? undefined : { scale: 0.9 }}
             >
               <X size={28} />
             </motion.button>
@@ -202,15 +210,16 @@ export default function Header() {
               role="menu"
             >
               {links.map(({ href, label }) => {
-                const active = isActive(pathname, href);
+                const active = mounted && isActive(pathname, href);
                 return (
                   <Link
                     key={href}
                     href={href}
-                    onClick={() => setOpen(false)}
-                    className={mobileLinkClasses(active)}
-                    aria-current={active ? "page" : undefined}
                     role="menuitem"
+                    onClick={() => setOpen(false)}
+                    aria-current={active ? "page" : undefined}
+                    suppressHydrationWarning
+                    className={mobileLinkClasses(active)}
                   >
                     {label}
                   </Link>

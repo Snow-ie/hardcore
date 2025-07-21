@@ -8,27 +8,13 @@ import {
   useTransform,
   MotionValue,
 } from "framer-motion";
+import { useSwipeable } from "react-swipeable";
 
-/**
- * -----------------------------------------------------------------------------
- * 💠 CompletedProjectsGallery – Snap‑scroll Ribbon (MULTI‑IMAGE v6)
- * -----------------------------------------------------------------------------
- * Each flagship project (Cyber Crime, Fusion Center, Police Trainings) now
- * showcases **3 photos**—every image appears as its own snap‑card but shares the
- * same title/description so the ribbon feels cohesive.
- *
- * The four bullet‑listed projects that still lack imagery are rendered in a
- * **separate gradient‑card grid** via `OtherCompletedProjectsSection` below.
- */
-
-/* -------------------------------------------------------------------------- */
-/* Types                                                                      */
-/* -------------------------------------------------------------------------- */
 export type ProjectCard = {
   id: string;
   title: string;
   description: string;
-  img: string; // always present here
+  img: string;
 };
 
 export type OtherProject = {
@@ -37,11 +23,7 @@ export type OtherProject = {
   description: string;
 };
 
-/* -------------------------------------------------------------------------- */
-/* Image‑rich data – 3 shots each (replace file paths)                         */
-/* -------------------------------------------------------------------------- */
 const imageProjects: ProjectCard[] = [
-  // Cyber Crime Lab ×3
   {
     id: "cyber-crime-1",
     title: "Cyber Crime Lab",
@@ -100,9 +82,6 @@ const imageProjects: ProjectCard[] = [
   },
 ];
 
-/* -------------------------------------------------------------------------- */
-/* No‑image data (renders as gradient cards)                                   */
-/* -------------------------------------------------------------------------- */
 const otherProjects: OtherProject[] = [
   {
     id: "biometric-kits",
@@ -126,11 +105,27 @@ const otherProjects: OtherProject[] = [
   },
 ];
 
-/* -------------------------------------------------------------------------- */
-/* 1️⃣  CompletedProjectsGallery                                                */
-/* -------------------------------------------------------------------------- */
 export default function CompletedProjectsGallery() {
   const trackRef = useRef<HTMLDivElement | null>(null);
+
+  /* --- swipe-to-scroll helpers ------------------------------------- */
+  const scrollBy = (dir: "left" | "right") => {
+    const el = trackRef.current;
+    if (!el) return;
+    // scroll roughly one card + gap (tweak if you change w-80 mx-2 etc.)
+    const cardWidth = 320 + 16 * 2; // 80 * 4 = 320px + 2rem (mx-4) on lg
+    el.scrollBy({
+      left: dir === "left" ? cardWidth : -cardWidth,
+      behavior: "smooth",
+    });
+  };
+
+  const handlers = useSwipeable({
+    onSwipedLeft: () => scrollBy("left"),
+    onSwipedRight: () => scrollBy("right"),
+    trackMouse: true,
+    delta: 20, // minimum px movement before it triggers
+  });
 
   return (
     <section className="w-full bg-surface py-20">
@@ -138,7 +133,9 @@ export default function CompletedProjectsGallery() {
         Completed Projects
       </h2>
 
+      {/* ribbon now listens for swipe gestures */}
       <div
+        {...handlers}
         ref={trackRef}
         className="scrollbar-none flex overflow-x-auto px-6 [scroll-snap-type:x_mandatory] lg:px-10"
       >
@@ -201,9 +198,6 @@ function SnapCard({
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* 2️⃣  OtherCompletedProjectsSection                                           */
-/* -------------------------------------------------------------------------- */
 export function OtherCompletedProjectsSection() {
   const container = {
     hidden: {},
