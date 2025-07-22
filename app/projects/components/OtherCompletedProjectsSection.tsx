@@ -2,8 +2,6 @@
 import { motion } from "framer-motion";
 import { otherProjects, type OtherProject } from "../../data/projectData";
 
-/* ------------------------------------------------------------------ */
-
 export default function OtherCompletedProjectsSection() {
   const container = {
     hidden: {},
