@@ -1,2 +1,15 @@
 @import "tailwindcss";
 @config "../tailwind.config.mjs";
+
+@layer utilities {
+  .no-scrollbar {
+    @apply overflow-x-auto;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    @apply hidden;
+  }
+}
+
+.mySwiper {
+  --swiper-theme-color: theme(colors.primary.DEFAULT);
+}
