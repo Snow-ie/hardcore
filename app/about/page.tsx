@@ -142,68 +142,54 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      {/* 4 ── OUR TEAM */}
-      <Section id="team" title="Our Team">
-        <div className=" grid gap-12 lg:grid-cols-2">
-          {/* Management summary */}
-          <motion.div
-            custom={0}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeUp}
-            className="space-y-4"
-          >
-            <h3 className="text-xl font-semibold text-primary">Management</h3>
-            <ul className="list-inside list-disc space-y-2 text-lg">
-              <li>CEO – provides strategic direction and drives innovation.</li>
-              <li>
-                CTO – leads our technical vision, ensuring top-tier quality.
-              </li>
-              <li>
-                Personal Assistants – keep day-to-day operations seamless.
-              </li>
-              <li>Procurement Manager – sources resources efficiently.</li>
-              <li>Project Manager – ensures timely delivery and success.</li>
-            </ul>
-          </motion.div>
+     {/* 4 ── OUR TEAM */}
+<Section id="team" title="Our Team">
+  <div className="grid gap-12 lg:grid-cols-2">
+    {/* Management summary */}
+    <motion.div
+      custom={0}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      variants={fadeUp}
+      className="space-y-4"
+    >
+      <h3 className="text-xl font-semibold text-primary">Management</h3>
+      <ul className="list-inside list-disc space-y-2 text-lg">
+        <li>CEO – provides strategic direction and drives innovation.</li>
+        <li>CTO – leads our technical vision, ensuring top-tier quality.</li>
+        <li>Personal Assistants – keep day-to-day operations seamless.</li>
+        <li>Procurement Manager – sources resources efficiently.</li>
+        <li>Project Manager – ensures timely delivery and success.</li>
+      </ul>
+    </motion.div>
 
-          <motion.div
-            custom={1}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeUp}
-            className="grid grid-cols-2 gap-6"
-          >
-            {[
-              { name: "Chinedu Okoye", role: "CEO", img: "/images/ceo.jpg" },
-              { name: "Adaeze Musa", role: "CTO", img: "/images/cto.jpg" },
-              {
-                name: "Seyi Bello",
-                role: "Project Mgr",
-                img: "/images/pm.jpg",
-              },
-              { name: "Ngozi Umar", role: "QA Lead", img: "/images/qa.jpg" },
-            ].map(({ name, role, img }) => (
-              <div
-                key={name}
-                className="flex flex-col items-center rounded-xl bg-white/60 p-4 backdrop-blur-md"
-              >
-                <Image
-                  src={img}
-                  alt={name}
-                  width={180}
-                  height={180}
-                  className="aspect-square rounded-full object-cover"
-                />
-                <p className="mt-3 font-semibold">{name}</p>
-                <p className="text-sm text-gray-600">{role}</p>
-              </div>
-            ))}
-          </motion.div>
+    {/* Team roles only - no names or images */}
+    <motion.div
+      custom={1}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      variants={fadeUp}
+      className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+    >
+      {[
+        "Chief Executive Officer",
+        "Chief Technology Officer",
+        "Project Manager",
+        "Quality Assurance Lead",
+      ].map((role, index) => (
+        <div
+          key={index}
+          className="rounded-xl bg-white/60 p-4 backdrop-blur-md shadow-sm"
+        >
+          <p className="text-sm text-gray-600">{role}</p>
         </div>
-      </Section>
+      ))}
+    </motion.div>
+  </div>
+</Section>
+
 
       {/* 5 ── CLIENTS */}
       <Section id="clients" title="Clients">
