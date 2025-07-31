@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 export default function ContactHero() {
   return (
     <section
-      className="relative isolate flex min-h-[40vh] md:min-h-[60vh] items-center justify-center overflow-hidden bg-center bg-cover bg-no-repeat"
+      className="relative isolate flex min-h-[60vh] md:min-h-[70vh] items-center justify-center overflow-hidden bg-center bg-cover bg-no-repeat"
       style={{ backgroundImage: "url('/images/contact-hero.png')" }}
     >
       <span

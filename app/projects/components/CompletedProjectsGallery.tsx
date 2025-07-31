@@ -73,8 +73,8 @@ export const imageProjects: ProjectCard[] = [
 
 export default function CompletedProjectsGallery() {
   return (
-    <section className="py-20">
-      <h2 className="mb-12 text-center text-4xl font-bold tracking-tight text-primary">
+    <section className="container mx-auto py-24">
+      <h2 className="my-12 text-center text-4xl font-bold tracking-tight text-primary">
         Completed Projects
       </h2>
 

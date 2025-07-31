@@ -16,8 +16,8 @@ export default function FooterLogo({ className }: LogoProps) {
       <Image
         src="/assets/hcb-Logo.svg"
         alt="Hardcore Biometric icon"
-        width={80}
-        height={80}
+        width={200}
+        height={200}
         priority
         className="pointer-events-none select-none"
       />

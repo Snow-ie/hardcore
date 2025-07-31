@@ -20,7 +20,7 @@ export function ProductHero({
   subtitle,
   bgSrc = "/images/nigeria-passport.jpg",
   align = "center",
-  minHeightClass = "min-h-[40vh] md:min-h-[60vh]",
+  minHeightClass = "min-h-[60vh] md:min-h-[70vh]",
   ctaLabel,
   ctaHref = "/contact",
 }: ProductHeroProps) {

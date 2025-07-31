@@ -47,7 +47,7 @@ export function CredentialProducts({
     <section className={clsx("bg-[var(--bg-light,#f2ffe9)] py-20", className)}>
       <div className="container mx-auto">
         <motion.ul
-          className="grid gap-x-16 gap-y-16 sm:grid-cols-2 lg:grid-cols-3"
+          className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -59,11 +59,8 @@ export function CredentialProducts({
               variants={itemVariants}
               whileHover={{ y: -4, scale: 1.02 }}
               whileFocus={{ y: -4, scale: 1.02 }}
-              className="max-w-sm text-left outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              tabIndex={0}
+              className="group flex cursor-pointer flex-col rounded-xl border border-slate-200 bg-white text-left shadow-sm outline-none transition-all duration-300 ease-in-out hover:!scale-100 hover:-translate-y-2 hover:shadow-xl focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
-              <h3 className="text-2xl font-semibold md:text-3xl">{p.title}</h3>
-
               <motion.div
                 className="relative mt-6 aspect-[5/3] w-full overflow-hidden rounded-md bg-foreground/10"
                 whileHover={hoverImage}
@@ -87,16 +84,20 @@ export function CredentialProducts({
                   />
                 )}
               </motion.div>
-
-              <p className="mt-6 text-base text-foreground/80">{p.summary}</p>
-
-              {p.bullets?.length ? (
-                <ul className="mt-3 ml-5 list-disc text-sm leading-relaxed text-foreground/80">
-                  {p.bullets.map((b) => (
-                    <li key={b}>{b}</li>
-                  ))}
-                </ul>
-              ) : null}
+              <div className="flex flex-grow flex-col p-6">
+                {" "}
+                <h3 className="text-2xl font-semibold md:text-3xl">
+                  {p.title}
+                </h3>
+                <p className="mt-6 text-base text-foreground/80">{p.summary}</p>
+                {p.bullets?.length ? (
+                  <ul className="mt-3 ml-5 list-disc text-sm leading-relaxed text-foreground/80">
+                    {p.bullets.map((b) => (
+                      <li key={b}>{b}</li>
+                    ))}
+                  </ul>
+                ) : null}
+              </div>
             </motion.li>
           ))}
         </motion.ul>

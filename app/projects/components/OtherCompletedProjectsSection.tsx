@@ -29,7 +29,7 @@ export default function OtherCompletedProjectsSection() {
           <motion.div
             key={p.id}
             variants={item}
-            className="overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary/80 to-primary/90 p-6 shadow-lg ring-1 ring-black/5 transition-all duration-300 ease-out hover:shadow-2xl"
+            className="overflow-hidden rounded-3xl bg-gradient-to-br from-[#a9e68f] via-[#a9e68f] to-[#a9e68f] p-6 shadow-lg ring-1 ring-black/5 transition-all duration-300 ease-out hover:shadow-2xl"
           >
             <h3 className="text-lg font-semibold text-black">{p.title}</h3>
             <p className="mt-1 text-sm text-black">{p.description}</p>
