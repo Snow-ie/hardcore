@@ -14,10 +14,17 @@ export const metadata = {
   title: "Hardcore Biometric Systems",
   description: "Biometric and data solutions for modern governance.",
   icons: {
-    icon: [
-      { url: "/assets/hcb-Logo.svg", type: "image/svg+xml", sizes: "any" },
-    ],
+    icon: "assets/hcbIcon.svg",
   },
+  keywords: [
+    "biometric systems",
+    "data solutions",
+    "identity management",
+    "governance technology",
+    "biometric verification",
+    "digital identity",
+    "Hardcore Biometric Systems",
+  ],
 };
 
 export default function RootLayout({
