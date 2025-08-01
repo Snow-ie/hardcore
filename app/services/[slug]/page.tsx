@@ -2,19 +2,23 @@ import { notFound } from "next/navigation";
 import { services } from "@/app/data/services";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
+import BackButton from "@/app/components/BackButton"; 
 
 export async function generateStaticParams() {
-  return services.map((s) => ({ slug: s.slug }));
+  return services.map((service) => ({
+    slug: service.slug,
+  }));
 }
 
-export const dynamicParams = false;
+type Params = { slug: string };
 
-export default function ServiceDetail({
+export default async function ServiceDetail({
   params,
 }: {
-  params: { slug: string };
+  params: Params;
 }) {
-  const service = services.find((s) => s.slug === params.slug);
+  const { slug } = params;
+  const service = services.find((s) => s.slug === slug);
   if (!service) notFound();
 
   return (
@@ -34,7 +38,8 @@ export default function ServiceDetail({
         </h1>
       </section>
 
-      {/* ───── Content ───── */}
+      
+
       <main className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8 py-16">
         <article className="prose prose-neutral md:prose-lg">
           <ReactMarkdown
@@ -70,6 +75,10 @@ export default function ServiceDetail({
           >
             {service.content}
           </ReactMarkdown>
+                <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <BackButton />
+      </div>
+
         </article>
       </main>
     </>

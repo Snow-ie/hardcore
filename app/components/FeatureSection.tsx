@@ -105,7 +105,7 @@ export default function FeatureSection() {
             className="mt-12"
           >
             <Link
-              href="/product"
+              href="/services"
               className="inline-flex items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-white shadow hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
             >
               Learn More
