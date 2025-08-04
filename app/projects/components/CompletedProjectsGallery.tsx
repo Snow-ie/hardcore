@@ -92,7 +92,7 @@ export default function CompletedProjectsGallery() {
           {imageProjects.map((project) => (
             <SwiperSlide
               key={project.id}
-              className="relative aspect-[4/3] overflow-hidden rounded-3xl ring-1 ring-black/10 dark:ring-white/10"
+              className="relative aspect-square overflow-hidden rounded-3xl ring-1 ring-black/10 dark:ring-white/10"
             >
               <Image
                 src={project.img}

@@ -75,7 +75,7 @@ export default async function ServiceDetail({
           >
             {service.content}
           </ReactMarkdown>
-                <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+                <div className="">
         <BackButton />
       </div>
 
